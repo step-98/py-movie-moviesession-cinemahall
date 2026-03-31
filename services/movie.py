@@ -1,7 +1,8 @@
+from django.db.models import QuerySet
 from db.models import Movie
 
 
-def get_movies(genres_ids: list = None, actors_ids: list = None) -> list:
+def get_movies(genres_ids: list = None, actors_ids: list = None) -> QuerySet:
     result = Movie.objects.all()
     if genres_ids and actors_ids:
         result = Movie.objects.filter(genres__id__in=genres_ids)
@@ -10,7 +11,7 @@ def get_movies(genres_ids: list = None, actors_ids: list = None) -> list:
         result = Movie.objects.filter(genres__id__in=genres_ids)
     elif actors_ids:
         result = Movie.objects.filter(actors__id__in=actors_ids)
-    return result
+    return result.distinct()
 
 
 def get_movie_by_id(movie_id: int) -> Movie:
